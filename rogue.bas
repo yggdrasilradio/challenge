@@ -104,7 +104,7 @@
 
 	end if
 
-	' Move monsters
+	' Update monsters
 	gosub 2000
 
 	' Keep going
@@ -114,14 +114,14 @@
 1000	poke &h71, 0
 	exec &h8c1b
 
-	' Move monsters
+	' Update monsters
 2000	for i = 1 to 2
+
+		' Current position
 		mx = x(i)
 		my = y(i)
 
-		' Seek player
-		gosub 5000
-
+		' Coordinates of proposed next move
 		nx = mx + dx(i)
 		ny = my + dy(i)
 
@@ -131,12 +131,18 @@
 			gosub 4000
 		end if
 
+		' Move monster
 		x(i) = nx
 		y(i) = ny
 		p = (my - 1) * 32 + mx - 1
 		p2 = (ny - 1) * 32 + nx - 1
 		print @p, mid$(a$(my), mx, 1);
 		print @p2, "&";
+
+		' Seek player
+		mx = x(i)
+		my = y(i)
+		gosub 5000
 
 	next i
 	return
