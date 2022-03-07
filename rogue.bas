@@ -104,7 +104,7 @@
 
 	end if
 
-	' Update monsters
+	' Move monsters
 	gosub 2000
 
 	' Keep going
@@ -118,11 +118,15 @@
 2000	for i = 1 to 2
 		mx = x(i)
 		my = y(i)
+
+		' Seek player
+		gosub 5000
+
 		nx = mx + dx(i)
 		ny = my + dy(i)
-		c$ = mid$(a$(ny), nx, 1)
 
 		' If we've hit a wall, choose a new direction
+		c$ = mid$(a$(ny), nx, 1)
 		if instr("!+-", c$) > 0 then
 			gosub 4000
 		end if
@@ -133,6 +137,7 @@
 		p2 = (ny - 1) * 32 + nx - 1
 		print @p, mid$(a$(my), mx, 1);
 		print @p2, "&";
+
 	next i
 	return
 
@@ -143,7 +148,7 @@
 	next i
 	return
 
-	' Choose random direction for monster to travel
+	' Choose direction for monster to travel
 4000	on rnd(4) goto 4010, 4020, 4030, 4040
 4010	dx(i) = 0
 	dy(i) = 1
@@ -163,4 +168,37 @@
 	if instr("!+-", c$) > 0 then
 		goto 4000
 	end if
+	return
+
+	' Seek player
+5000	if mx <> x and my <> y then
+		return
+	end if
+	dx = 0
+	dy = 0
+	if mx = x and my < y then
+		dy = 1
+	end if
+	if mx = x and my > y then
+		dy = -1
+	end if
+	if my = y and mx < x then
+		dx = 2
+	end if
+	if my = y and mx > x then
+		dx = -2
+	end if
+	nx = mx
+	ny = my
+5010	nx = nx + dx
+	ny = ny + dy
+	c$ = mid$(a$(ny), nx, 1)
+	if instr("!+-", c$) > 0 then
+		return
+	end if
+	if nx <> x or ny <> y then
+		goto 5010
+	end if
+	dx(i) = dx
+	dy(i) = dy
 	return
