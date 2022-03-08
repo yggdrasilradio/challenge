@@ -3,7 +3,7 @@
 	on brk goto 1000
 
 	' Clear screen
-	cls
+10	cls
 
 	' Init maze
 	dim a$(15)
@@ -52,6 +52,9 @@
 	data 23, 2, 2, 0
 	data 23, 14, -2, 0
 
+	' Init inventory
+	i$ = ""
+
 	' Wait for key
 20	s$ = inkey$
 	if s$ = "" then
@@ -88,6 +91,7 @@
 
 	' Sword?
 	if c$ = "^" then
+		i$ = "^"
 		mid$(a$(ny), nx, 1) = " "
 	end if
 
@@ -102,6 +106,11 @@
 		x = nx
 		y = ny
 
+	end if
+
+	' Has the player won yet?
+	if s = 50 then
+		gosub 6000
 	end if
 
 	' Update monsters
@@ -121,28 +130,15 @@
 		mx = x(i)
 		my = y(i)
 
-		' Coordinates of proposed next move
-		nx = mx + dx(i)
-		ny = my + dy(i)
-
-		' If we've hit a wall, choose a new direction
-		c$ = mid$(a$(ny), nx, 1)
-		if instr("!+-", c$) > 0 then
-			gosub 4000
+		' If monster isn't dead, do monster AI
+		if mx > 0 then
+			gosub 8000
 		end if
 
-		' Move monster
-		x(i) = nx
-		y(i) = ny
-		p = (my - 1) * 32 + mx - 1
-		p2 = (ny - 1) * 32 + nx - 1
-		print @p, mid$(a$(my), mx, 1);
-		print @p2, "&";
-
-		' Seek player
-		mx = x(i)
-		my = y(i)
-		gosub 5000
+		' Has player died?
+		if x = x(i) and y = y(i) then
+			gosub 7000
+		end if
 
 	next i
 	return
@@ -208,3 +204,56 @@
 	dx(i) = dx
 	dy(i) = dy
 	return
+
+	' Player collected all the gold
+6000	p = 15 * 32 + 16
+	print @p, "YOU HAVE WON!";
+6020	s$ = inkey$
+	goto 6020
+
+	' Player collided with a monster
+	' Does he hold the sword?
+7000	if i$ = "^" then
+
+		' Take away the sword
+		i$ = ""
+
+		' Kill the monster
+		x(i) = 0
+
+		' Back to the game
+		return
+
+	end if
+
+	' Aww, too bad, he lost
+	p = 15 * 32 + 21
+	print @p, "YOU DIED";
+7020	s$ = inkey$
+	goto 7020
+
+	' Monster AI
+8000	nx = mx + dx(i)
+	ny = my + dy(i)
+
+	' If we've hit a wall, choose a new direction
+	c$ = mid$(a$(ny), nx, 1)
+	if instr("!+-", c$) > 0 then
+		gosub 4000
+	end if
+
+	' Move monster
+	x(i) = nx
+	y(i) = ny
+	p = (my - 1) * 32 + mx - 1
+	p2 = (ny - 1) * 32 + nx - 1
+	print @p, mid$(a$(my), mx, 1);
+	print @p2, "&";
+
+	' Seek player
+	mx = x(i)
+	my = y(i)
+	gosub 5000
+
+	return
+
