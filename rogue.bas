@@ -172,7 +172,7 @@
 	end if
 	return
 
-	' Seek player
+	' Chase player
 5000	if mx <> x and my <> y then
 		return
 	end if
@@ -250,7 +250,7 @@
 	print @p, mid$(a$(my), mx, 1);
 	print @p2, "&";
 
-	' Seek player
+	' Chase player
 	mx = x(i)
 	my = y(i)
 	gosub 5000
