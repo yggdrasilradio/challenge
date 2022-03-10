@@ -209,7 +209,10 @@
 6000	p = 15 * 32 + 16
 	print @p, "YOU HAVE WON!";
 6020	s$ = inkey$
-	goto 6020
+	if s$ = "" then
+		goto 6020
+	end if
+	run
 
 	' Player collided with a monster
 	' Does he hold the sword?
@@ -230,7 +233,10 @@
 	p = 15 * 32 + 21
 	print @p, "YOU DIED";
 7020	s$ = inkey$
-	goto 7020
+	if s$ = "" then
+		goto 7020
+	end if
+	run
 
 	' Monster AI
 8000	nx = mx + dx(i)

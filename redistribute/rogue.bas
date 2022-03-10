@@ -32,10 +32,12 @@
 5011IFNX<>X OR NY<>Y THENGOTO5010
 5012DX(I)=DX:DY(I)=DY:RETURN
 6000P=15*32+16:PRINT@P,"YOU HAVE WON!";
-6020S$=INKEY$:GOTO6020
+6020S$=INKEY$:IFS$="" THENGOTO6020
+6021RUN
 7000IFI$="^" THENI$="":X(I)=0:RETURN
 7001P=15*32+21:PRINT@P,"YOU DIED";
-7020S$=INKEY$:GOTO7020
+7020S$=INKEY$:IFS$="" THENGOTO7020
+7021RUN
 8000NX=MX+DX(I):NY=MY+DY(I):C$=MID$(A$(NY),NX,1):IFINSTR("!+-",C$)>0 THENGOSUB4000
 8001X(I)=NX:Y(I)=NY:P=(MY-1)*32+MX-1:P2=(NY-1)*32+NX-1:PRINT@P,MID$(A$(MY),MX,1);:PRINT@P2,"&";:MX=X(I):MY=Y(I):GOSUB5000:RETURN
 8002DATA"+-------------------+-------+","!                   !       !","+---+   +-------+   +---+   !","!   !         ^ !           !","!   +   +---+---+   +-------+","!           !               !","!   +---+   !   +-----------+"
