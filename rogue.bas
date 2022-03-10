@@ -41,12 +41,15 @@
 	p = (y - 1) * 32 + x - 1
 	print @p, "O";
 
-	' Init monsters
+	' Init snakes
 	dim x(2), y(2), dx(2), dy(2)
 	for i = 1 to 2
 		read x(i), y(i), dx(i), dy(i)
 	next i
-	gosub 3000
+	for i = 1 to 2
+		p = (y(i) - 1) * 32 + x(i) - 1
+		print @p, "&";
+	next i
 
 	' Monster data
 	data 23, 2, 2, 0
@@ -113,7 +116,7 @@
 		gosub 6000
 	end if
 
-	' Update monsters
+	' Update snakes
 	gosub 2000
 
 	' Keep going
@@ -123,14 +126,14 @@
 1000	poke &h71, 0
 	exec &h8c1b
 
-	' Update monsters
+	' Update snakes
 2000	for i = 1 to 2
 
 		' Current position
 		mx = x(i)
 		my = y(i)
 
-		' If monster isn't dead, do monster AI
+		' If snake isn't dead, do snake AI
 		if mx > 0 then
 			gosub 8000
 		end if
@@ -143,14 +146,7 @@
 	next i
 	return
 
-	' Render monsters
-3000	for i = 1 to 2
-		p = (y(i) - 1) * 32 + x(i) - 1
-		print @p, "&";
-	next i
-	return
-
-	' Choose direction for monster to travel
+	' Choose random direction for snake to travel
 4000	on rnd(4) goto 4010, 4020, 4030, 4040
 4010	dx(i) = 0
 	dy(i) = 1
@@ -163,7 +159,6 @@
 	goto 4050
 4040	dx(i) = -2
 	dy(i) = 0
-	goto 4050
 4050	nx = mx + dx(i)
 	ny = my + dy(i)
 	c$ = mid$(a$(ny), nx, 1)
@@ -214,20 +209,27 @@
 	end if
 	run
 
-	' Player collided with a monster
+	' Player collided with a snake
 	' Does he hold the sword?
-7000	if i$ = "^" then
+7000	p = (y - 1) * 32 + x - 1
+	if i$ = "^" then
 
 		' Take away the sword
 		i$ = ""
 
-		' Kill the monster
+		' Kill the snake
 		x(i) = 0
+
+		' Player icon replaces snake
+		print @p, "O";
 
 		' Back to the game
 		return
 
 	end if
+
+	' Snake icon replaces player
+	print @p, "&";
 
 	' Aww, too bad, he lost
 	p = 15 * 32 + 21
@@ -248,7 +250,7 @@
 		gosub 4000
 	end if
 
-	' Move monster
+	' Move snake
 	x(i) = nx
 	y(i) = ny
 	p = (my - 1) * 32 + mx - 1
