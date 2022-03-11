@@ -256,7 +256,11 @@
 	p = (my - 1) * 32 + mx - 1
 	p2 = (ny - 1) * 32 + nx - 1
 	print @p, mid$(a$(my), mx, 1);
-	print @p2, "&";
+
+	' Don't display snake if he's collided with the player wielding the sword
+	if i$ = "" or nx <> x or ny <> y then
+		print @p2, "&";
+	end if
 
 	' Chase player
 	mx = x(i)
@@ -264,4 +268,3 @@
 	gosub 5000
 
 	return
-
