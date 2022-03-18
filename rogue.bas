@@ -396,7 +396,7 @@
 	end if
 	run
 
-	' Monster AI
+	' Dragon AI
 8000	nx = mx + dx(i)
 	ny = my + dy(i)
 
