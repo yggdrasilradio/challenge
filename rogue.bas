@@ -15,9 +15,9 @@
 	' Reset machine on BREAK
 	on brk goto 1000
 
-	' Set colors for 32 column screen
-	palette 12, 63	' white text
-	palette 13, 0 	' black background
+	' Set colors for 80 column screen
+	'palette 12, 63	' white text
+	'palette 13, 0 	' black background
 
 	' Clear screen
 10	cls
@@ -100,19 +100,27 @@
 		goto 20
 	end if
 
-	' Place items in maze
-	for i = 1 to 6
-		read y, x, a$
-		mid$(a$(y), x, 1) = a$
+	' Place 10 gold pieces randomly in maze
+	for i = 1 to 10
+40		x = rnd(mw)
+		y = rnd(mh)
+		if mid$(a$(y * 2), x * 4 - 1, 1) = " " then
+			mid$(a$(y * 2), x * 4 - 1, 1) = "$"
+		else
+			goto 40
+		end if
 	next i
 
-	' Item data
-	data 4, 15, "^"		' Sword
-	data 8, 3, "$"		' Gold
-	data 12, 3, "$"
-	data 12, 15, "$"
-	data 14, 19, "$"
-	data 14, 27, "$"
+	' Place 4 swords randomly in maze
+	for i = 1 to 4
+50		x = rnd(mw)
+		y = rnd(mh)
+		if mid$(a$(y * 2), x * 4 - 1, 1) = " " then
+			mid$(a$(y * 2), x * 4 - 1, 1) = "^"
+		else
+			goto 50
+		end if
+	next i
 
 	' Draw maze
 	cls
@@ -131,7 +139,7 @@
 	locate x - 1, y - 1
 	print "O";
 
-	' Init dragons
+	' Place dragons in maze
 	dim x(2), y(2), dx(2), dy(2)
 	for i = 1 to 2
 		read x(i), y(i), dx(i), dy(i)
@@ -208,7 +216,7 @@
 	end if
 
 	' Has the player won yet?
-	if s = 50 then
+	if s = 100 then
 		gosub 6000
 	end if
 
@@ -255,7 +263,6 @@
 	end if
 
 	' Down
-'3030	if y = 14 then
 3030	if y = mh * 2 then
 		goto 3040
 	end if 
@@ -274,7 +281,6 @@
 	end if
 
 	' Right
-'3050	if x = 27 then
 3050	if x = 4 * mw - 1 then
 		goto 3060
 	end if
