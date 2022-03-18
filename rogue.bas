@@ -1,9 +1,13 @@
 
+	' Set up video mode
+	' 24 rows, 80 columns
+	width 80
+
 	' Double speed poke
 	poke &hffd9, 0
 
 	' Need a lot of string space
-	clear 2000
+	clear 3000
 
 	' Randomize the RND function
 	x = rnd(-timer)
@@ -17,22 +21,32 @@
 
 	' Clear screen
 10	cls
-	print "LOADING";
+	print "Generating maze";
+
+	' Maze width and height
+	mw = 19
+	mh = 11
 
 	' Init maze
-	dim a$(15)
-	for i = 1 to 15
+	dim a$(mh * 2 + 1)
+	r1$ = "+"
+	r2$ = "!"
+	for i = 1 to mw
+		r1$ = r1$ + "---+"
+		r2$ = r2$ + " X !"
+	next i
+	for i = 1 to mh * 2 + 1
 		if i and 1 then
-			a$(i) =  "+---+---+---+---+---+---+---+"
+			a$(i) =  r1$
 		else
-			a$(i) =  "! X ! X ! X ! X ! X ! X ! X !"
+			a$(i) =  r2$
 		end if
 	next i
 
 	' Visit first cell
-	dim sx(50), sy(50)
+	dim sx(mw * mh + 1), sy(mw * mh + 1)
  	s = 1
-	n = 7 * 7 - 1
+	n = mw * mh - 1
 	sx(s) = 3
 	sy(s) = 2
 	mid$(a$(2), 3, 1) = " "
@@ -102,27 +116,27 @@
 
 	' Draw maze
 	cls
-	for i = 1 to 15
+	for i = 1 to mh * 2 + 1
 		print a$(i)
 	next i
 
 	' Init score
 	s = 0
-	p = 15 * 32
-	print @p, "GOLD: 0";
+	locate 0, 23
+	print "GOLD: 0";
 
 	' Init player
 	x = 3
 	y = 2
-	p = (y - 1) * 32 + x - 1
-	print @p, "O";
+	locate x - 1, y - 1
+	print "O";
 
 	' Init dragons
 	dim x(2), y(2), dx(2), dy(2)
 	for i = 1 to 2
 		read x(i), y(i), dx(i), dy(i)
-		p = (y(i) - 1) * 32 + x(i) - 1
-		print @p, "&";
+		locate x(i) - 1, y(i) - 1
+		print "&";
 	next i
 
 	' Dragon data
@@ -165,8 +179,8 @@
 	' Gold?
 	if c$ = "$" then
 		s = s + 10
-		p = 15 * 32
-		print @p, "GOLD:"; s;
+		locate 0, 23
+		print "GOLD:"; s;
 		mid$(a$(ny), nx, 1) = " "
 		m$ = "FOUND GOLD"
 		gosub 9000
@@ -184,10 +198,10 @@
 	if instr("!+-", c$) = 0 then
 
 		' Move player
-		p = (y - 1) * 32 + x - 1
-		print @p, " ";
-		p = (ny - 1) * 32 + nx - 1
-		print @p, "O";
+		locate x - 1, y - 1
+		print " ";
+		locate nx - 1, ny - 1
+		print "O";
 		x = nx
 		y = ny
 
@@ -241,7 +255,8 @@
 	end if
 
 	' Down
-3030	if y = 14 then
+'3030	if y = 14 then
+3030	if y = mh * 2 then
 		goto 3040
 	end if 
 	ny = y + 2
@@ -259,7 +274,8 @@
 	end if
 
 	' Right
-3050	if x = 27 then
+'3050	if x = 27 then
+3050	if x = 4 * mw - 1 then
 		goto 3060
 	end if
 	nx = x + 4
@@ -363,7 +379,7 @@
 
 	' Player collided with a dragon
 	' Does he hold the sword?
-7000	p = (y - 1) * 32 + x - 1
+7000	locate x - 1, y - 1
 	if i$ = "^" then
 
 		' Take away the sword
@@ -375,7 +391,8 @@
 		gosub 9000
 
 		' Player icon replaces dragon
-		print @p, "O";
+		locate x - 1, y - 1
+		print "O";
 
 		' Back to the game
 		return
@@ -383,7 +400,8 @@
 	end if
 
 	' Dragon icon replaces player
-	print @p, "&";
+	locate x - 1, y - 1
+	print "&";
 
 	' Aww, too bad, you lost
 	m$ = "YOU DIED"
@@ -409,13 +427,13 @@
 	' Move dragon
 	x(i) = nx
 	y(i) = ny
-	p = (my - 1) * 32 + mx - 1
-	p2 = (ny - 1) * 32 + nx - 1
-	print @p, mid$(a$(my), mx, 1);
+	locate mx - 1, my - 1
+	print mid$(a$(my), mx, 1);
 
 	' Don't display dragon if he's collided with the player wielding the sword
 	if i$ = "" or nx <> x or ny <> y then
-		print @p2, "&";
+		locate nx - 1, ny - 1
+		print "&";
 	end if
 
 	' Chase player if visible
@@ -425,5 +443,6 @@
 
 	return
 
-9000	print @15 * 32 + 29 - len(m$), m$;
+9000	locate len(a$(1)) - len(m$), 23
+	print m$;
 	return
