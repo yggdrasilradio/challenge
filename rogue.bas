@@ -26,12 +26,15 @@
 
 	' Clear screen
 10	cls
+
+	' Generate maze
 	attr 2, 0 ' green
 	print "Generating maze";
 
 	' Maze width and height
 	mw = 19
 	mh = 11
+	t = mw * mh
 
 	' Init maze
 	dim a$(mh * 2 + 1)
@@ -58,8 +61,7 @@
 	mid$(a$(2), 3, 1) = " "
 
 	' Find neighboring cells that haven't been visited that are behind walls
-20	print ".";
-	x = sx(s)
+20	x = sx(s)
 	y = sy(s)
 	gosub 3000
 
@@ -103,6 +105,7 @@
 	' Keep generating maze if not done
 	n = n - 1
 	if n > 0 then
+		print ".";
 		goto 20
 	end if
 
@@ -110,7 +113,8 @@
 	cls
 	attr 5, 0 ' cyan
 	for i = 1 to mh * 2 + 1
-		print a$(i)
+		locate 0, i - 1
+		print a$(i);
 	next i
 
 	' Place 10 gold pieces randomly in maze
