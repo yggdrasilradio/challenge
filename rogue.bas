@@ -1,8 +1,4 @@
 
-	' Set up video mode
-	' 24 rows, 80 columns
-	width 80
-
 	' Double speed poke
 	poke &hffd9, 0
 
@@ -15,12 +11,22 @@
 	' Reset machine on BREAK
 	on brk goto 1000
 
-	' Set colors for 80 column screen
-	'palette 12, 63	' white text
-	'palette 13, 0 	' black background
+	' Set up video mode and palette colors
+	rgb
+	width 80
+	palette 0, 0		' background color
+	for i = 8 to 15
+		read c
+		palette i, c	' 8 foreground colors
+	next i
+
+	' Palette color values:
+	' yellow, red, green, blue, orange, cyan, magenta, white
+	data 54, 36, 18, 11, 38, 25, 45, 63
 
 	' Clear screen
 10	cls
+	attr 2, 0 ' green
 	print "Generating maze";
 
 	' Maze width and height
@@ -100,11 +106,21 @@
 		goto 20
 	end if
 
+	' Draw maze
+	cls
+	attr 5, 0 ' cyan
+	for i = 1 to mh * 2 + 1
+		print a$(i)
+	next i
+
 	' Place 10 gold pieces randomly in maze
+	attr 7, 0 ' white
 	for i = 1 to 10
 40		x = rnd(mw)
 		y = rnd(mh)
 		if mid$(a$(y * 2), x * 4 - 1, 1) = " " then
+			locate x * 4 - 2, y * 2 - 1
+			print "$";
 			mid$(a$(y * 2), x * 4 - 1, 1) = "$"
 		else
 			goto 40
@@ -112,21 +128,19 @@
 	next i
 
 	' Place 4 swords randomly in maze
+	attr 7, 0 ' white
 	for i = 1 to 4
 50		x = rnd(mw)
 		y = rnd(mh)
 		if mid$(a$(y * 2), x * 4 - 1, 1) = " " then
+			locate x * 4 - 2, y * 2 - 1
+			print "^";
 			mid$(a$(y * 2), x * 4 - 1, 1) = "^"
 		else
 			goto 50
 		end if
 	next i
-
-	' Draw maze
-	cls
-	for i = 1 to mh * 2 + 1
-		print a$(i)
-	next i
+	attr 2, 0 ' green
 
 	' Init score
 	s = 0
@@ -137,6 +151,7 @@
 	x = 3
 	y = 2
 	locate x - 1, y - 1
+	attr 7, 0 ' white
 	print "O";
 
 	' Place dragons in maze
@@ -144,6 +159,7 @@
 	for i = 1 to 2
 		read x(i), y(i), dx(i), dy(i)
 		locate x(i) - 1, y(i) - 1
+		attr 7, 0 ' white
 		print "&";
 	next i
 
@@ -209,6 +225,7 @@
 		locate x - 1, y - 1
 		print " ";
 		locate nx - 1, ny - 1
+		attr 7, 0 ' white
 		print "O";
 		x = nx
 		y = ny
@@ -398,6 +415,7 @@
 
 		' Player icon replaces dragon
 		locate x - 1, y - 1
+		attr 7, 0 ' white
 		print "O";
 
 		' Back to the game
@@ -407,6 +425,7 @@
 
 	' Dragon icon replaces player
 	locate x - 1, y - 1
+	attr 7, 0 ' white
 	print "&";
 
 	' Aww, too bad, you lost
@@ -439,6 +458,7 @@
 	' Don't display dragon if he's collided with the player wielding the sword
 	if i$ = "" or nx <> x or ny <> y then
 		locate nx - 1, ny - 1
+		attr 7, 0 ' white
 		print "&";
 	end if
 
@@ -450,5 +470,6 @@
 	return
 
 9000	locate len(a$(1)) - len(m$), 23
+	attr 2, 0 ' green
 	print m$;
 	return
