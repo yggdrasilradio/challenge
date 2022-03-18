@@ -27,9 +27,42 @@
 	' Clear screen
 10	cls
 
+	attr 0, 0 ' yellow
+	print "*** DRAGONMAZE ***"
+	print
+	attr 7, 0 ' white
+	print "O ";
+	attr 2, 0 ' green
+	print "Player"
+
+	attr 7, 0 ' white
+	print "& ";
+	attr 2, 0 ' green
+	print "Dragon"
+
+	attr 7, 0 ' white
+	print "^ ";
+	attr 2, 0 ' green
+	print "Sword"
+
+	attr 7, 0 ' white
+	print "$ ";
+	attr 2, 0 ' green
+	print "Gold"
+
+	print
+
+	attr 5, 0 ' cyan
+	print "* Use arrow keys to move."
+	print "* Avoid the dragons."
+	print "* Collect all the gold to win."
+	print "* A sword will kill one dragon."
+	print "* Good luck!"
+
 	' Generate maze
 	attr 2, 0 ' green
-	print "Generating maze";
+	locate 0, 23
+	print "Generating maze:";
 
 	' Maze width and height
 	mw = 19
@@ -105,7 +138,10 @@
 	' Keep generating maze if not done
 	n = n - 1
 	if n > 0 then
-		print ".";
+		locate 16, 23
+		attr 2, 0 ' green
+		print str$(int(100 * (t - n) / t));
+		print "%";
 		goto 20
 	end if
 
