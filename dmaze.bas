@@ -211,8 +211,8 @@
 	next i
 
 	' Dragon data
-	data 23, 2, 2, 0
-	data 23, 14, -2, 0
+	data 23, 12, 2, 0
+	data 55, 12, -2, 0
 
 	' Wait for key
 100	s$ = inkey$
