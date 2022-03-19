@@ -300,18 +300,21 @@
 	' Update dragons
 2000	for i = 1 to 2
 
-		' Current position
-		mx = x(i)
-		my = y(i)
-
-		' If dragon isn't dead, do dragon AI
-		if mx > 0 then
-			gosub 8000
+		' Check for player death before movement
+		if x = x(i) and y = y(i) then
+			gosub 7000 ' Player death
 		end if
 
-		' Has player died?
+		' If dragon isn't dead, do dragon AI
+		mx = x(i)
+		my = y(i)
+		if mx > 0 then
+			gosub 8000 ' Dragon AI
+		end if
+
+		' Check for player death after movement
 		if x = x(i) and y = y(i) then
-			gosub 7000
+			gosub 7000 ' Player death
 		end if
 
 	next i
@@ -449,7 +452,7 @@
 		goto 6010
 	end if
 	' Ignore arrow keys so the player doesn't inadvertently restart the game too soon
-	c = asc$(s$)
+	c = asc(s$)
 	if c < 32 or c > 93 then
 		goto 6010
 	end if
@@ -498,7 +501,7 @@
 		goto 7020
 	end if
 	' Ignore arrow keys so the player doesn't inadvertently restart the game too soon
-	c = asc$(s$)
+	c = asc(s$)
 	if c < 32 or c > 93 then
 		goto 7020
 	end if
