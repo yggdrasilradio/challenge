@@ -455,9 +455,10 @@
 		' Take away the sword
 		i$ = ""
 
-		' Kill the dragon
+		' Kill the dragon (flash the screen white)
 		x(i) = 0
 		m$ = "Killed dragon"
+		palette 0, 63 ' white
 		gosub 9000
 
 		' Player icon replaces dragon
@@ -475,8 +476,9 @@
 	attr 7, 0 ' white
 	print "&";
 
-	' Aww, too bad, you lost
+	' Aww, too bad, you lost (flash screen red)
 	m$ = "You died"
+	palette 0, 36
 	gosub 9000
 
 	' Wait for keystroke, then restart the game
@@ -519,4 +521,5 @@
 9000	locate len(a$(1)) - len(m$), 23
 	attr 2, 0 ' green
 	print m$;
+	palette 0, 0
 	return
