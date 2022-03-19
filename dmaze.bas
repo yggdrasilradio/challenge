@@ -191,6 +191,11 @@
 	locate 0, 23
 	print "Gold: 0";
 
+	' Init inventory
+	i$ = ""
+	locate 33, 23
+	print "Swords: 0";
+
 	' Init player
 	x = 3
 	y = 2
@@ -210,9 +215,6 @@
 	' Dragon data
 	data 23, 2, 2, 0
 	data 23, 14, -2, 0
-
-	' Init inventory
-	i$ = ""
 
 	' Wait for key
 100	s$ = inkey$
@@ -256,7 +258,10 @@
 
 	' Sword?
 	if c$ = "^" then
-		i$ = "^"
+		i$ = i$ + "^"
+		locate 40, 23
+		attr 2, 0 ' green
+		print len(i$);
 		mid$(a$(ny), nx, 1) = " "
 		m$ = "Found sword"
 		gosub 9000
@@ -437,7 +442,7 @@
 	return
 
 	' Player collected all the gold
-6000	m$ = "You have won!"
+6000	m$ = "You have conquered the DragonMaze!"
 	gosub 9000
 
 	' Wait for keystroke, then restart the game
@@ -450,10 +455,13 @@
 	' Player collided with a dragon
 	' Does he hold the sword?
 7000	locate x - 1, y - 1
-	if i$ = "^" then
+	if len(i$) > 0 then
 
 		' Take away the sword
-		i$ = ""
+		i$ = left$(i$, len(i$) - 1)
+		locate 40, 23
+		attr 2, 0 ' green
+		print len(i$);
 
 		' Kill the dragon (flash the screen white)
 		x(i) = 0
