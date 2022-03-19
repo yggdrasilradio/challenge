@@ -280,15 +280,7 @@
 	if s = 100 then
 
 		' Player collected all the gold
-		m$ = "You have won!"
-		gosub 9000
-
-		' Wait for keystroke, then restart the game
-120		s$ = inkey$
-		if s$ = "" then
-			goto 120
-		end if
-		run
+		gosub 6000
 
 	end if
 
@@ -443,6 +435,17 @@
 	dx(i) = dx
 	dy(i) = dy
 	return
+
+	' Player collected all the gold
+6000	m$ = "You have won!"
+	gosub 9000
+
+	' Wait for keystroke, then restart the game
+6010	s$ = inkey$
+	if s$ = "" then
+		goto 6010
+	end if
+	run
 
 	' Player collided with a dragon
 	' Does he hold the sword?
