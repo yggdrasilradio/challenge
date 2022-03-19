@@ -14,49 +14,45 @@
 	' Set up video mode and palette colors
 	rgb
 	width 80
-	palette 0, 0		' background color
-	for i = 8 to 15
-		read c
-		palette i, c	' 8 foreground colors
-	next i
-
-	' Palette color values:
-	' yellow, red, green, blue, orange, cyan, magenta, white
-	data 54, 36, 18, 11, 38, 25, 45, 63
+	palette 0, 0		' background: 0 black
+	palette 8, 63 		' foreground: 0 white
+	palette 9, 18 		'	      1 green
+	palette 10, 25		'	      2 cyan
+	palette 11, 54		'	      3 yellow
 
 	' Clear screen
 10	cls
 
 	' Loading screen
-	attr 0, 0 ' yellow
+	attr 3, 0 ' yellow
 	print "*** DRAGONMAZE ***"
 	print
-	attr 7, 0 ' white
+	attr 0, 0 ' white
 
 	print "by Rick Adams"
 	print
 	print "O ";
-	attr 2, 0 ' green
+	attr 1, 0 ' green
 	print "Player"
 
-	attr 7, 0 ' white
+	attr 0, 0 ' white
 	print "& ";
-	attr 2, 0 ' green
+	attr 1, 0 ' green
 	print "Dragon"
 
-	attr 7, 0 ' white
+	attr 0, 0 ' white
 	print "^ ";
-	attr 2, 0 ' green
+	attr 1, 0 ' green
 	print "Sword"
 
-	attr 7, 0 ' white
+	attr 0, 0 ' white
 	print "$ ";
-	attr 2, 0 ' green
+	attr 1, 0 ' green
 	print "Gold"
 
 	print
 
-	attr 5, 0 ' cyan
+	attr 2, 0 ' cyan
 	print "* Use arrow keys to move."
 	print "* Avoid the dragons."
 	print "* Collect all the gold to win."
@@ -66,7 +62,7 @@
 	print "* Good luck!"
 
 	' Generate maze
-	attr 2, 0 ' green
+	attr 1, 0 ' green
 	locate 0, 23
 	print "Generating maze:";
 
@@ -145,7 +141,7 @@
 	n = n - 1
 	if n > 0 then
 		locate 16, 23
-		attr 2, 0 ' green
+		attr 1, 0 ' green
 		print str$(int(100 * (t - n) / t));
 		print "%";
 		goto 20
@@ -153,14 +149,14 @@
 
 	' Draw maze
 	cls
-	attr 5, 0 ' cyan
+	attr 2, 0 ' cyan
 	for i = 1 to mh * 2 + 1
 		locate 0, i - 1
 		print a$(i);
 	next i
 
 	' Place 10 gold pieces randomly in maze
-	attr 7, 0 ' white
+	attr 0, 0 ' white
 	for i = 1 to 10
 40		x = rnd(mw)
 		y = rnd(mh)
@@ -174,7 +170,7 @@
 	next i
 
 	' Place 4 swords randomly in maze
-	attr 7, 0 ' white
+	attr 0, 0 ' white
 	for i = 1 to 4
 50		x = rnd(mw)
 		y = rnd(mh)
@@ -186,7 +182,7 @@
 			goto 50
 		end if
 	next i
-	attr 2, 0 ' green
+	attr 1, 0 ' green
 
 	' Init score
 	s = 0
@@ -202,7 +198,7 @@
 	x = 3
 	y = 2
 	locate x - 1, y - 1
-	attr 7, 0 ' white
+	attr 0, 0 ' white
 	print "O";
 
 	' Place dragons in maze
@@ -210,7 +206,7 @@
 	for i = 1 to 2
 		read x(i), y(i), dx(i), dy(i)
 		locate x(i) - 1, y(i) - 1
-		attr 7, 0 ' white
+		attr 0, 0 ' white
 		print "&";
 	next i
 
@@ -262,7 +258,7 @@
 	if c$ = "^" then
 		i$ = i$ + "^"
 		locate 41, 23
-		attr 2, 0 ' green
+		attr 1, 0 ' green
 		print len(i$);
 		mid$(a$(ny), nx, 1) = " "
 		m$ = "Found sword"
@@ -276,7 +272,7 @@
 		locate x - 1, y - 1
 		print " ";
 		locate nx - 1, ny - 1
-		attr 7, 0 ' white
+		attr 0, 0 ' white
 		print "O";
 		x = nx
 		y = ny
@@ -467,7 +463,7 @@
 		' Take away the sword
 		i$ = left$(i$, len(i$) - 1)
 		locate 41, 23
-		attr 2, 0 ' green
+		attr 1, 0 ' green
 		print len(i$);
 
 		' Kill the dragon (flash the screen white)
@@ -478,7 +474,7 @@
 
 		' Player icon replaces dragon
 		locate x - 1, y - 1
-		attr 7, 0 ' white
+		attr 0, 0 ' white
 		print "O";
 
 		' Back to the game
@@ -488,7 +484,7 @@
 
 	' Dragon icon replaces player
 	locate x - 1, y - 1
-	attr 7, 0 ' white
+	attr 0, 0 ' white
 	print "&";
 
 	' Aww, too bad, you lost (flash screen red)
@@ -527,7 +523,7 @@
 	' Don't display dragon if he's collided with the player wielding the sword
 	if i$ = "" or nx <> x or ny <> y then
 		locate nx - 1, ny - 1
-		attr 7, 0 ' white
+		attr 0, 0 ' white
 		print "&";
 	end if
 
@@ -539,7 +535,7 @@
 	return
 
 9000	locate len(a$(1)) - len(m$), 23
-	attr 2, 0 ' green
+	attr 1, 0 ' green
 	print m$;
 	palette 0, 0
 	return
