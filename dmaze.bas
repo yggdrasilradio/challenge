@@ -444,7 +444,7 @@
 	return
 
 	' Player collected all the gold
-6000	m$ = "You have conquered the DragonMaze!"
+6000	m$ = "You've conquered the DragonMaze!"
 	gosub 9000
 
 	' Wait for keystroke, then restart the game
