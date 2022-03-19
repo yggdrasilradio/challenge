@@ -27,10 +27,14 @@
 	' Clear screen
 10	cls
 
+	' Loading screen
 	attr 0, 0 ' yellow
 	print "*** DRAGONMAZE ***"
 	print
 	attr 7, 0 ' white
+
+	print "by Rick Adams"
+	print
 	print "O ";
 	attr 2, 0 ' green
 	print "Player"
@@ -185,7 +189,7 @@
 	' Init score
 	s = 0
 	locate 0, 23
-	print "GOLD: 0";
+	print "Gold: 0";
 
 	' Init player
 	x = 3
@@ -244,9 +248,9 @@
 	if c$ = "$" then
 		s = s + 10
 		locate 0, 23
-		print "GOLD:"; s;
+		print "Gold:"; s;
 		mid$(a$(ny), nx, 1) = " "
-		m$ = "FOUND GOLD"
+		m$ = "Found gold"
 		gosub 9000
 	end if
 
@@ -254,7 +258,7 @@
 	if c$ = "^" then
 		i$ = "^"
 		mid$(a$(ny), nx, 1) = " "
-		m$ = "FOUND SWORD"
+		m$ = "Found sword"
 		gosub 9000
 	end if
 
@@ -274,7 +278,18 @@
 
 	' Has the player won yet?
 	if s = 100 then
-		gosub 6000
+
+		' Player collected all the gold
+		m$ = "You have won!"
+		gosub 9000
+
+		' Wait for keystroke, then restart the game
+120		s$ = inkey$
+		if s$ = "" then
+			goto 120
+		end if
+		run
+
 	end if
 
 	' Update dragons
@@ -307,7 +322,7 @@
 	next i
 	return
 
-	' Find unvisited neighboring cells behind walls
+	' Find all unvisited neighboring cells behind walls
 3000	r$ = ""
 
 	' Up
@@ -429,17 +444,6 @@
 	dy(i) = dy
 	return
 
-	' Player collected all the gold
-6000	m$ = "YOU HAVE WON!"
-	gosub 9000
-
-	' Wait for keystroke, then restart the game
-6020	s$ = inkey$
-	if s$ = "" then
-		goto 6020
-	end if
-	run
-
 	' Player collided with a dragon
 	' Does he hold the sword?
 7000	locate x - 1, y - 1
@@ -450,7 +454,7 @@
 
 		' Kill the dragon
 		x(i) = 0
-		m$ = "KILLED DRAGON"
+		m$ = "Killed dragon"
 		gosub 9000
 
 		' Player icon replaces dragon
@@ -469,7 +473,7 @@
 	print "&";
 
 	' Aww, too bad, you lost
-	m$ = "YOU DIED"
+	m$ = "You died"
 	gosub 9000
 
 	' Wait for keystroke, then restart the game

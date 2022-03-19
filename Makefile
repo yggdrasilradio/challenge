@@ -1,17 +1,13 @@
-all: rogue
+all: dmaze
 
-rogue: rogue.bas
-	decbpp < rogue.bas > /tmp/rogue.bas
+dmaze: dmaze.bas
+	decbpp < dmaze.bas > /tmp/dmaze.bas
 ifneq ("$(wildcard /media/share1/COCO/drive3.dsk)", "")
-	decb copy -tr /tmp/rogue.bas /media/share1/COCO/drive3.dsk,ROGUE.BAS
+	decb copy -tr /tmp/dmaze.bas /media/share1/COCO/drive3.dsk,DMAZE.BAS
 endif
-	cp /tmp/rogue.bas redistribute
-	rm -f redistribute/game.dsk
-	decb dskini redistribute/game.dsk
-	decb copy -tr /tmp/rogue.bas redistribute/game.dsk,GAME.BAS
-	cat /tmp/rogue.bas
-	rm -f /tmp/rogue.bas
-
-
-
-
+	cp /tmp/dmaze.bas redistribute
+	rm -f redistribute/dmaze.dsk
+	decb dskini redistribute/dmaze.dsk
+	decb copy -tr /tmp/dmaze.bas redistribute/dmaze.dsk,DMAZE.BAS
+	cat /tmp/dmaze.bas
+	rm -f /tmp/dmaze.bas
