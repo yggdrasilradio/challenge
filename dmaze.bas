@@ -60,7 +60,9 @@
 	print "* Use arrow keys to move."
 	print "* Avoid the dragons."
 	print "* Collect all the gold to win."
-	print "* A sword will kill one dragon."
+	print "* Collect swords to fight the dragons."
+	print "* One sword will kill one dragon."
+	print "* Swords magically vanish after use."
 	print "* Good luck!"
 
 	' Generate maze
@@ -193,7 +195,7 @@
 
 	' Init inventory
 	i$ = ""
-	locate 33, 23
+	locate 34, 23
 	print "Swords: 0";
 
 	' Init player
@@ -259,7 +261,7 @@
 	' Sword?
 	if c$ = "^" then
 		i$ = i$ + "^"
-		locate 40, 23
+		locate 41, 23
 		attr 2, 0 ' green
 		print len(i$);
 		mid$(a$(ny), nx, 1) = " "
@@ -447,19 +449,24 @@
 
 	' Wait for keystroke, then restart the game
 6010	s$ = inkey$
-	if s$ = "" then
+	if s$ = ""  then
+		goto 6010
+	end if
+	' Ignore arrow keys so the player doesn't inadvertently restart the game too soon
+	c = asc$(s$)
+	if c < 32 or c > 93 then
 		goto 6010
 	end if
 	run
 
 	' Player collided with a dragon
-	' Does he hold the sword?
+	' Is he holding a sword?
 7000	locate x - 1, y - 1
 	if len(i$) > 0 then
 
 		' Take away the sword
 		i$ = left$(i$, len(i$) - 1)
-		locate 40, 23
+		locate 41, 23
 		attr 2, 0 ' green
 		print len(i$);
 
@@ -492,6 +499,11 @@
 	' Wait for keystroke, then restart the game
 7020	s$ = inkey$
 	if s$ = "" then
+		goto 7020
+	end if
+	' Ignore arrow keys so the player doesn't inadvertently restart the game too soon
+	c = asc$(s$)
+	if c < 32 or c > 93 then
 		goto 7020
 	end if
 	run
