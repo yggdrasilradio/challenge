@@ -389,33 +389,34 @@
 		r$ = r$ + "4"
 	end if
 
+	return
+
 	' Choose random direction for dragon to travel
-	d = val(mid$(r$, rnd(len(r$)), 1))
-	on d goto 4010, 4020, 4030, 4040
+4500	d = val(mid$(r$, rnd(len(r$)), 1))
+	on d goto 4510, 4520, 4530, 4540
 
 	' Up
-4010	dx(i) = 0
+4510	dx(i) = 0
 	dy(i) = -1
-	goto 4050
+	goto 4550
 
 	' Down
-4020	dx(i) = 0
+4520	dx(i) = 0
 	dy(i) = 1
-	goto 4050
+	goto 4550
 
 	' Left
-4030	dx(i) = -2
+4530	dx(i) = -2
 	dy(i) = 0
-	goto 4050
+	goto 4550
 
 	' Right
-4040	dx(i) = 2
+4540	dx(i) = 2
 	dy(i) = 0
 
 	' Move the dragon that direction
-4050	nx = mx + dx(i)
+4550	nx = mx + dx(i)
 	ny = my + dy(i)
-
 	return
 
 	' Chase player
@@ -538,6 +539,7 @@
 	c$ = mid$(a$(ny), nx, 1)
 	if instr("!+-", c$) > 0 then
 		gosub 4000
+		gosub 4500
 	end if
 
 	' Move dragon
