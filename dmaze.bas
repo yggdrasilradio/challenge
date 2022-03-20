@@ -361,37 +361,60 @@
 
 3060	return
 
-	' Choose random direction for dragon to travel
-4000	on rnd(4) goto 4010, 4020, 4030, 4040
 
-	' Down
-4010	dx(i) = 0
-	dy(i) = 1
-	goto 4050
-
-	' Right
-4020	dx(i) = 2
-	dy(i) = 0
-	goto 4050
+	' Which direction(s) can the dragon go?
+4000	r$ = ""
 
 	' Up
-4030	dx(i) = 0
+	c$ = mid$(a$(my - 1), mx, 1)
+	if instr("!+-", c$) = 0 then
+		r$ = r$ + "1"
+	end if
+
+	' Down
+	c$ = mid$(a$(my + 1), mx, 1)
+	if instr("!+-", c$) = 0 then
+		r$ = r$ + "2"
+	end if
+
+	' Left
+	c$ = mid$(a$(my), mx - 2, 1)
+	if instr("!+-", c$) = 0 then
+		r$ = r$ + "3"
+	end if
+
+	' Right
+	c$ = mid$(a$(my), mx + 2, 1)
+	if instr("!+-", c$) = 0 then
+		r$ = r$ + "4"
+	end if
+
+	' Choose random direction for dragon to travel
+	d = val(mid$(r$, rnd(len(r$)), 1))
+	on d goto 4010, 4020, 4030, 4040
+
+	' Up
+4010	dx(i) = 0
 	dy(i) = -1
 	goto 4050
 
+	' Down
+4020	dx(i) = 0
+	dy(i) = 1
+	goto 4050
+
 	' Left
-4040	dx(i) = -2
+4030	dx(i) = -2
+	dy(i) = 0
+	goto 4050
+
+	' Right
+4040	dx(i) = 2
 	dy(i) = 0
 
-	' Can the dragon move there?
+	' Move the dragon that direction
 4050	nx = mx + dx(i)
 	ny = my + dy(i)
-	c$ = mid$(a$(ny), nx, 1)
-
-	' Try again if not
-	if instr("!+-", c$) > 0 then
-		goto 4000
-	end if
 
 	return
 
@@ -521,12 +544,14 @@
 	x(i) = nx
 	y(i) = ny
 	locate mx - 1, my - 1
+
+	' Display item behind dragon, if any
+	attr 0, 0 ' white
 	print mid$(a$(my), mx, 1);
 
 	' Don't display dragon if he's collided with the player wielding the sword
 	if i$ = "" or nx <> x or ny <> y then
 		locate nx - 1, ny - 1
-		attr 0, 0 ' white
 		print "&";
 	end if
 
