@@ -535,10 +535,12 @@
 8000	nx = mx + dx(i)
 	ny = my + dy(i)
 
-	' If we've hit a wall, choose a new direction
+	' Find all possible directions to move
+	gosub 4000
+
+	' If we've hit a wall or are at a junction, choose a new direction
 	c$ = mid$(a$(ny), nx, 1)
-	if instr("!+-", c$) > 0 then
-		gosub 4000
+	if instr("!+-", c$) > 0 or len(r$) > 2 then
 		gosub 4500
 	end if
 
