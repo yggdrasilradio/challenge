@@ -420,7 +420,8 @@
 	return
 
 	' Chase player
-5000	if mx <> x and my <> y then
+5000	p$ = ""
+	if mx <> x and my <> y then
 
 		' Not possible to see the player
 		return
@@ -430,17 +431,25 @@
 	' Direction to the player
 	dx = 0
 	dy = 0
-	if mx = x and my < y then
-		dy = 1
-	end if
+	' Up
 	if mx = x and my > y then
+		p$ = "1"
 		dy = -1
 	end if
-	if my = y and mx < x then
-		dx = 2
+	' Down
+	if mx = x and my < y then
+		p$ = "2"
+		dy = 1
 	end if
+	' Left
 	if my = y and mx > x then
+		p$ = "3"
 		dx = -2
+	end if
+	' Right
+	if my = y and mx < x then
+		p$ = "4"
+		dx = 2
 	end if
 	nx = mx
 	ny = my
@@ -451,6 +460,7 @@
 	if instr("!+-", c$) > 0 then
 
 		' A wall prevents the dragon from seeing the player
+		p$ = ""
 		return
 
 	end if
@@ -462,6 +472,7 @@
 	end if
 
 	' Found the player, set movement to get closer
+	r$ = p$
 	dx(i) = dx
 	dy(i) = dy
 	return
@@ -475,6 +486,7 @@
 	if s$ = ""  then
 		goto 6010
 	end if
+
 	' Ignore arrow keys so the player doesn't inadvertently restart the game too soon
 	c = asc(s$)
 	if c < 32 or c > 93 then
@@ -538,9 +550,12 @@
 	' Find all possible directions to move
 	gosub 4000
 
-	' If we've hit a wall or are at a junction, choose a new direction
+	' Override those directions if player is visible
+	gosub 5000
+
+	' If we've hit a wall, or are at a junction, or are chasing player, choose a new direction
 	c$ = mid$(a$(ny), nx, 1)
-	if instr("!+-", c$) > 0 or len(r$) > 2 then
+	if instr("!+-", c$) > 0 or len(r$) > 2 or len(p$) > 0 then
 		gosub 4500
 	end if
 
@@ -559,7 +574,7 @@
 		print "&";
 	end if
 
-	' Chase player if visible
+	' Chase player if visible from new location
 	mx = x(i)
 	my = y(i)
 	gosub 5000
