@@ -54,6 +54,7 @@
 
 	attr 2, 0 ' cyan
 	print "* Use arrow keys to move."
+	print "* Press 'T' to teleport."
 	print "* Avoid the dragons."
 	print "* Collect all the gold to win."
 	print "* Collect swords to fight the dragons."
@@ -228,17 +229,21 @@
 	i = asc(s$)
 	nx = x
 	ny = y
-	if i = 94 then		' uparrow
+	if i = 94 then		' uparrow (move up)
 		ny = ny - 1
 	end if
-	if i = 10 then		' downarrow
+	if i = 10 then		' downarrow (move down)
 		ny = ny + 1
 	end if
-	if i = 8 then		' leftarrow
+	if i = 8 then		' leftarrow (move left)
 		nx = nx - 2
 	end if
-	if i = 9  then		' rightarrow
+	if i = 9  then		' rightarrow (move right)
 		nx = nx + 2
+	end if
+	if s$ = "T" then	' T (teleport)
+		nx = rnd(mw) * 4 - 1
+		ny = rnd(mh) * 2
 	end if
 
 	' Check for collision
