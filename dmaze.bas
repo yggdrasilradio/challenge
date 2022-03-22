@@ -396,22 +396,34 @@
 	on d goto 4510, 4520, 4530, 4540
 
 	' Up
-4510	dx(i) = 0
+4510	if len(r$) > 1 and dx(i) = 0 and dy(i) = 1 then
+		goto 4500 ' Don't backtrack unless you have to
+	end if
+	dx(i) = 0
 	dy(i) = -1
 	goto 4550
 
 	' Down
-4520	dx(i) = 0
+4520	if len(r$) > 1 and dx(i) = 0 and dy(i) = -1 then
+		goto 4500 ' Don't backtrack unless you have to
+	end if
+	dx(i) = 0
 	dy(i) = 1
 	goto 4550
 
 	' Left
-4530	dx(i) = -2
+4530	if len(r$) > 1 and dx(i) = 2 and dy(i) = 0 then
+		goto 4500 ' Don't backtrack unless you have to
+	end if
+	dx(i) = -2
 	dy(i) = 0
 	goto 4550
 
 	' Right
-4540	dx(i) = 2
+4540	if len(r$) > 1 and dx(i) = -2 and dy(i) = 0 then
+		goto 4500 ' Don't backtrack unless you have to
+	end if
+	dx(i) = 2
 	dy(i) = 0
 
 	' Move the dragon that direction
@@ -536,6 +548,7 @@
 	if s$ = "" then
 		goto 7020
 	end if
+
 	' Ignore arrow keys so the player doesn't inadvertently restart the game too soon
 	c = asc(s$)
 	if c < 32 or c > 93 then
