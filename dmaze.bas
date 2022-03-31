@@ -544,7 +544,7 @@
 	print "&";
 
 	' Aww, too bad, you lost (flash screen red)
-	m$ = "You died"
+	m$ = "    You died"
 	palette 0, 36
 	gosub 9000
 
